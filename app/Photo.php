@@ -4,6 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Photo
+ * @package App
+ * @method static create($data)
+ */
 class Photo extends Model
 {
     /** @var string */
@@ -15,8 +20,11 @@ class Photo extends Model
         'path'
     ];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function project()
     {
-        $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class, 'project_id');
     }
 }

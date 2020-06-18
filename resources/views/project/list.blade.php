@@ -1,20 +1,22 @@
+@extends('layouts.app')
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
+@section('content')
+    <div class="container">
+        <h2 class="text-center text-white">{{ __('Projects') }}</h2>
+        <div class="d-flex flex-wrap justify-content-between">
+            @foreach($projects as $project)
+                <div class="card card-project">
+                    <span class="card-header">
+                        <a href="{{ route('project.show', $project->id) }}">{{ $project->name }}</a>
+                    </span>
+                    <span class="card-body">
+                        <img class="rounded" src="{{ asset('storage/' . $project->photos[0]->path) }}"  alt="{{ $project->description }}"/>
+                    </span>
+                    <span class="card-footer">
+                        {{ $project->created_at }}
+                    </span>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
-</div>
+@endsection

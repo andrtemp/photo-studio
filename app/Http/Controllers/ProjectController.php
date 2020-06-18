@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\ProjectService;
 use App\Project;
 use Illuminate\Http\Request;
 
@@ -29,13 +30,22 @@ class ProjectController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
+        $data = $this->validate($request, [
+            'name' => 'string',
+            'description' => 'string|nullable',
+            'files' => 'required'
+        ]);
+
+        $project  = Project::create($data);
+        $service =  new ProjectService($project);
+        $service->storePhotos($data['files']);
+
         return redirect()->route('project.index');
     }
 
@@ -47,7 +57,8 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        return view('project.view');
+        $project = Project::find($id);
+        return view('project.view', compact('project'));
     }
 
     /**
